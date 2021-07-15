@@ -274,40 +274,42 @@ HTML;
         // because it will be minified in production.
         return <<<HTML
 {$assetWarning}
-<script src="{$fullAssetPath}" data-turbo-eval="false" data-turbolinks-eval="false"{$nonce}></script>
+<script async defer onload="initLivewire()" src="{$fullAssetPath}" data-turbo-eval="false" data-turbolinks-eval="false"{$nonce}></script>
 <script data-turbo-eval="false" data-turbolinks-eval="false"{$nonce}>
-    {$windowLivewireCheck}
+    var initLivewire = function() {
+        {$windowLivewireCheck}
 
-    window.livewire = new Livewire({$jsonEncodedOptions});
-    {$devTools}
-    window.Livewire = window.livewire;
-    window.livewire_app_url = '{$appUrl}';
-    window.livewire_token = {$jsLivewireToken};
+        window.livewire = new Livewire({$jsonEncodedOptions});
+        {$devTools}
+        window.Livewire = window.livewire;
+        window.livewire_app_url = '{$appUrl}';
+        window.livewire_token = {$jsLivewireToken};
 
-	{$windowAlpineCheck}
-    window.deferLoadingAlpine = function (callback) {
-        window.addEventListener('livewire:load', function () {
-            callback();
+        {$windowAlpineCheck}
+        window.deferLoadingAlpine = function (callback) {
+            window.addEventListener('livewire:load', function () {
+                callback();
+            });
+        };
+
+        let started = false;
+
+        window.addEventListener('alpine:initializing', function () {
+            if (! started) {
+                window.livewire.start();
+
+                started = true;
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            if (! started) {
+                window.livewire.start();
+
+                started = true;
+            }
         });
     };
-
-    let started = false;
-
-    window.addEventListener('alpine:initializing', function () {
-        if (! started) {
-            window.livewire.start();
-
-            started = true;
-        }
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        if (! started) {
-            window.livewire.start();
-
-            started = true;
-        }
-    });
 </script>
 HTML;
     }
