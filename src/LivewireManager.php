@@ -274,7 +274,7 @@ HTML;
         // because it will be minified in production.
         return <<<HTML
 {$assetWarning}
-<script async onload="initLivewire()" src="{$fullAssetPath}" data-turbo-eval="false" data-turbolinks-eval="false"{$nonce}></script>
+<script defer onload="initLivewire()" src="{$fullAssetPath}" data-turbo-eval="false" data-turbolinks-eval="false"{$nonce}></script>
 <script data-turbo-eval="false" data-turbolinks-eval="false"{$nonce}>
     var initLivewire = function() {
         {$windowLivewireCheck}
