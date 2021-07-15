@@ -1,5 +1,4 @@
 import DOM from '@/dom/dom'
-import '@/dom/polyfills/index'
 import store from '@/Store'
 import Connection from '@/connection'
 import Polling from '@/component/Polling'
